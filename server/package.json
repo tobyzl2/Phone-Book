@@ -10,6 +10,8 @@
   "author": "Toby Liang",
   "license": "ISC",
   "dependencies": {
+    "csv-parser": "^2.3.0",
+    "csv-writer": "^1.4.0",
     "express": "^4.17.1"
   }
 }
