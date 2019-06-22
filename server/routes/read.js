@@ -1,38 +1,34 @@
 const express = require('express');
-const csv = require('csv-parser');
+const csv=require('csvtojson');
 const fs = require('fs');
 const path = require('path');
 
 // Define file path
-const CSV_PATH = path.join(__dirname, '../', 'data','phone_book.csv');
+const csvFilePath = path.join(__dirname, '../', 'data','phone_book.csv');
 
 // Initialize router
 const readRouter = express.Router();
-
+ 
 // Read CSV file
-function readPhoneBook(res) {
+function readPhoneBook() {
     const result = {entries: []};
 
     return new Promise((resolve, reject) => {
-        fs.createReadStream(CSV_PATH)
-            .pipe(csv())
-            .on('data', (data) => {
-                // Push data to entries array
-                result.entries.push(data);
-            })
-            .on('end', () => {
-                resolve(result);
+        csv()
+            .fromFile(csvFilePath)
+            .then(jsonObj => {
+                resolve(jsonObj);
             })
     });
 }
 
 // Handle GET request
 readRouter.get('/', (req, res) => {
-    if (fs.existsSync(CSV_PATH)) {
-        const result = readPhoneBook(res);
+    if (fs.existsSync(csvFilePath)) {
+        const result = readPhoneBook();
         result.then((output) => {
             res.status(200).send(JSON.stringify(output));
-        })
+        });
     } else {
         res.status(200).send(JSON.stringify({Message: 'No file phone_book.csv found.'}));
     }

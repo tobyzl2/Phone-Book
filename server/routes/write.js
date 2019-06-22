@@ -4,7 +4,7 @@ const path = require('path');
 const createCSVWriter = require('csv-writer').createArrayCsvWriter;
 
 // Define file path
-const CSV_PATH = path.join(__dirname, '../', 'data','phone_book.csv');
+const csvFilePath = path.join(__dirname, '../', 'data','phone_book.csv');
 
 // Initalize router
 const writeRouter = express.Router();
@@ -12,8 +12,8 @@ const writeRouter = express.Router();
 // Initialize csvWriter
 const csvWriter = createCSVWriter({
     header: ['Name', 'Phone', 'Email'],
-    path: CSV_PATH,
-    append: fs.existsSync(CSV_PATH)
+    path: csvFilePath,
+    append: fs.existsSync(csvFilePath)
 });
 
 // Handle POST request
@@ -26,10 +26,8 @@ writeRouter.post('/:name/:phone/:email', (req, res) => {
 
     // Write entry
     csvWriter.writeRecords(entry).then(() => {
-        console.log(`Writing finished... ${entry}`);
+        res.status(200).send(entry);
     });
-
-    res.status(200).send();
 })
 
 // Export router

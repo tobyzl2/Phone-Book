@@ -11,8 +11,8 @@
   "author": "Toby Liang",
   "license": "ISC",
   "dependencies": {
-    "csv-parser": "^2.3.0",
     "csv-writer": "^1.4.0",
+    "csvtojson": "^2.0.8",
     "express": "^4.17.1"
   },
   "devDependencies": {
