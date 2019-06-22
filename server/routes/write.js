@@ -1,14 +1,19 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const createCSVWriter = require('csv-writer').createArrayCsvWriter;
+
+// Define file path
+const CSV_PATH = path.join(__dirname, '../', 'data','phone_book.csv');
 
 // Initalize router
 const writeRouter = express.Router();
 
 // Initialize csvWriter
 const csvWriter = createCSVWriter({
-    header: ['Name', 'Phone Number', 'Email Address'],
-    path: path.join(__dirname, '../', 'phone_book.csv')
+    header: ['Name', 'Phone', 'Email'],
+    path: CSV_PATH,
+    append: fs.existsSync(CSV_PATH)
 });
 
 // Handle POST request

@@ -3,32 +3,39 @@ const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path');
 
+// Define file path
+const CSV_PATH = path.join(__dirname, '../', 'data','phone_book.csv');
+
 // Initialize router
 const readRouter = express.Router();
 
 // Read CSV file
 function readPhoneBook(res) {
-    const output = {entries: []};
+    const result = {entries: []};
 
     return new Promise((resolve, reject) => {
-        fs.createReadStream(path.join(__dirname, '../', 'phone_book.csv'))
-        .pipe(csv())
-        .on('data', (data) => {
-            // Push data to entries array
-            output.entries.push(data);
-        })
-        .on('end', () => {
-            resolve(output);
-        })
+        fs.createReadStream(CSV_PATH)
+            .pipe(csv())
+            .on('data', (data) => {
+                // Push data to entries array
+                result.entries.push(data);
+            })
+            .on('end', () => {
+                resolve(result);
+            })
     });
 }
 
 // Handle GET request
 readRouter.get('/', (req, res) => {
-    const output = readPhoneBook(res);
-    output.then((result) => {
-        res.status(200).send(output);
-    })
+    if (fs.existsSync(CSV_PATH)) {
+        const result = readPhoneBook(res);
+        result.then((output) => {
+            res.status(200).send(JSON.stringify(output));
+        })
+    } else {
+        res.status(200).send(JSON.stringify({Message: 'No file phone_book.csv found.'}));
+    }
 });
 
 // Export router
