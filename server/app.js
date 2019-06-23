@@ -1,8 +1,12 @@
 const express = require('express');
+const cors = require("cors");
 
 // Initialize app and PORT
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
+
+// CORS
+app.use(cors());
 
 // Use readRouter
 const readRouter = require('./routes/read');
